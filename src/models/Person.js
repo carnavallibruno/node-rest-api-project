@@ -17,3 +17,7 @@ const personSchema = new mongoose.Schema(
     zipCode: {type: String}
   }
 )
+
+const people = mongoose.model('people', personSchema);
+
+export default people;
