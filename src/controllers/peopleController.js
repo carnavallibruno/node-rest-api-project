@@ -47,6 +47,18 @@ class PersonController {
       }
     })
   }
+
+  static deletePerson = (req, res) => {
+    const personId = req.params.id;
+
+    people.findByIdAndDelete(personId, (err) => {
+      if(err) {
+        res.status(500).send({message: `${err.message} - falha ao deletar usuário`})
+      } else {
+        res.status(200).send({message: 'Usuário excluído com sucesso'})
+      }
+    })
+  }
 }
 
 export default PersonController;
