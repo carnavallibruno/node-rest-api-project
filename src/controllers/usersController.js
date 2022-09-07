@@ -4,18 +4,32 @@ class UserController {
 
   static getUsers = (req, res) => {
     users.find((err, users) => {
+
       if (err) {
-        res.status(400).send({message: `${err.message} - Erro em encontrar banco de dados`})
+        res.status(404).send({message: `${err.message} - Erro em encontrar banco de dados`})
       } else {
         res.status(200).json(users)
       }
     })
   }
+  
 
   static getUserById = (req, res) => {
     const userId = req.params.id;
 
     users.findById(userId, (err, users) => {
+      if(err) {
+        res.status(404).send({message: `User not Found`})
+      } else {
+        res.status(200).send(users)
+      }
+    })
+  }
+
+  static getUserByName = (req, res) => {
+    const userName = req.query.name;
+
+    users.find({"name": {$regex: userName}}, {}, (err, users) => {
       if(err) {
         res.status(404).send({message: `User not Found`})
       } else {
@@ -41,7 +55,7 @@ class UserController {
 
     users.findByIdAndUpdate(userId, {$set: req.body}, (err) => {
       if (err) {
-        res.status(500).send({message: `${err.message} - falha ao atualizar a informação do usuário`})
+        res.status(404).send({message: `${err.message} - falha ao atualizar a informação do usuário`})
       } else {
         res.status(200).send({message: `Informação do usuário atualizada com sucesso`})
       }
@@ -55,7 +69,7 @@ class UserController {
       if(err) {
         res.status(500).send({message: `${err.message} - falha ao deletar usuário`})
       } else {
-        res.status(200).send({message: 'Usuário excluído com sucesso'})
+        res.status(204).send({message: 'Usuário excluído com sucesso'})
       }
     })
   }
