@@ -3,7 +3,7 @@ import people from '../models/Person.js';
 class PersonController {
 
   static getPeople = (req, res) => {
-    people.find((err, livros) => {
+    people.find((err, people) => {
       if (err) {
         res.status(400).send({message: `${err.message} - Erro em encontrar banco de dados`})
       } else {
@@ -39,7 +39,7 @@ class PersonController {
   static putPerson = (req, res) => {
     const personId = req.params.id;
 
-    people.findByIdAndUpdate(id, {$set: req.body}, (err) => {
+    people.findByIdAndUpdate(personId, {$set: req.body}, (err) => {
       if (err) {
         res.status(500).send({message: `${err.message} - falha ao atualizar a informação do usuário`})
       } else {

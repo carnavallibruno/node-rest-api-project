@@ -1,14 +1,15 @@
 {
   "name": "rest-api-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node REST API project",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Bruno Carnavalli",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.19"
