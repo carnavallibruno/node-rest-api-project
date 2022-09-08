@@ -2,7 +2,7 @@ import users from '../models/User.js';
 
 class UserController {
   
-  static getUsers = async (req, res) => {
+  static getUsersWithPagination = async (req, res) => {
     try {
       const page = req.query.page;
       const limit = req.query.limit;
@@ -16,7 +16,7 @@ class UserController {
       } else {
         if (previousPage == 0) {
           res.status(200).json({ Users, totalPages, currentPage: parseInt(page), nextPage})
-        } 
+        }
         else {
           if (page == totalPages) {
             res.status(200).json({ Users, totalPages, currentPage: parseInt(page), previousPage})
@@ -29,6 +29,17 @@ class UserController {
       res.status(404).send({ message: err.message })
     };
   }
+
+  static getUsers = (req, res) => {
+    users.find((err, users) => {
+      if (err) {
+        res.status(400).send({message: `${err.message} - Erro em encontrar banco de dados`})
+      } else {
+        res.status(200).json(users)
+      }
+    })
+  }
+  
   
   static getUserById = (req, res) => {
     const userId = req.params.id;
@@ -49,7 +60,7 @@ class UserController {
       if(err) {
         res.status(404).send({message: 'User not Found'})
       } else {
-        res.status(200).send(users)
+        res.status(200).json(users)
       }
     }).select("-password");
   }
