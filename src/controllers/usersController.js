@@ -3,15 +3,14 @@ import users from '../models/User.js';
 class UserController {
   
   static getUsers = async (req, res) => {
-    const page = req.query.page;
-    const limit = req.query.limit;
-    const counter = await users.countDocuments();
-    const totalPages = Math.ceil(counter / limit)
-    const previousPage = (parseInt(page) - 1)
-    const nextPage = (parseInt(page) + 1)
-    const Users = await users.find().select("-password").limit(limit).skip((page - 1) * limit).exec()
-    
     try {
+      const page = req.query.page;
+      const limit = req.query.limit;
+      const counter = await users.countDocuments();
+      const totalPages = Math.ceil(counter / limit);
+      const previousPage = (parseInt(page) - 1);
+      const nextPage = (parseInt(page) + 1);
+      const Users = await users.find().select("-password").limit(limit).skip((page - 1) * limit).exec();
       if (page > totalPages ) {
         res.status(404).json({ message: "Page does not exist."})
       } else {
@@ -25,7 +24,6 @@ class UserController {
             res.status(200).json({ Users, totalPages, currentPage: parseInt(page), previousPage, nextPage})
           }
         }
-        
       }
     } catch (err) {
       res.status(404).send({ message: err.message })

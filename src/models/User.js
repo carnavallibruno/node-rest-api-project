@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 function birthDate(birth) {
   let birthDate = new Date(birth);
   const currentDate = new Date();
@@ -12,12 +11,17 @@ function birthDate(birth) {
   }
 }
 
+function formatDate(date) {
+  let inputDate = new Date(date);
+  return inputDate.toLocaleDateString();
+}
+
 const userSchema = new mongoose.Schema(
   {
     id: { type: String },
     name: { type: String, validate: /[A-zÀ-ú\s]+$/, required: true },
     cpf: { type: String, validate: /^[0-9]*$/, minlength: 11, maxlength: 11, required: true },
-    birthDate: { type: Date, validate: [birthDate, 'This user is under 18 years old.'], required: true }, // * Validation to ensure the user is older than 18
+    birthDate: { type: String, set: date => formatDate(date), validate: [birthDate, 'This user is under 18 years old.'], required: true },
     email: { type: String, validate: /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/, required: true },
     password: { type: String, minlength: 6, required: true },
     address: { type: String, required: true },
