@@ -37,7 +37,7 @@ class UserController {
     
     users.findById(userId, (err, users) => {
       if(err) {
-        res.status(404).send({message: `User not Found`})
+        res.status(404).send({message: 'User not Found'})
       } else {
         res.status(200).send(users)
       }
@@ -49,7 +49,7 @@ class UserController {
     
     users.find({"name": {$regex: userName, $options: 'i' } }, {}, (err, users) => {
       if(err) {
-        res.status(404).send({message: `User not Found`})
+        res.status(404).send({message: 'User not Found'})
       } else {
         res.status(200).send(users)
       }
@@ -61,7 +61,7 @@ class UserController {
     
     user.save((err) => {
       if (err) {
-        res.status(500).send({message: `${err.message} - Falha ao cadastrar usuário. Verifique se todos os campos estão preenchidos corretamente.`})
+        res.status(500).send({message: `${err.message} - Could not register this user. Check if all fields have been filled correctly.`})
       } else {
         res.status(201).send(user.toJSON())
       }
@@ -71,26 +71,27 @@ class UserController {
   static putUser = (req, res) => {
     const userId = req.params.id;
     
-    users.findByIdAndUpdate(userId, {$set: req.body}, (err) => {
+    users.findByIdAndUpdate(userId, {$set: req.body}, { runValidators: true }, (err) => {
       if (err) {
-        res.status(404).send({message: `${err.message} - Falha ao atualizar a informação do usuário.`})
+        res.status(404).send({message: `${err.message} - User not found.`})
       } else {
-        res.status(200).send({message: `Informação do usuário atualizada com sucesso!`})
+        res.status(200).send({message: 'User info updated successfully!'})
       }
     })
   }
-  
+
   static deleteUser = (req, res) => {
     const userId = req.params.id;
     
     users.findByIdAndDelete(userId, (err) => {
       if(err) {
-        res.status(404).send({message: `${err.message} - Usuário não encontrado.`})
+        res.status(404).send({message: `${err.message} - User not found.`})
       } else {
-        res.status(204).send({message: 'Usuário excluído com sucesso!'})
+        res.status(204).send({message: 'User successfully deleted!'})
       }
     }).select("-password");
   }
+  
 }
 
 export default UserController;
